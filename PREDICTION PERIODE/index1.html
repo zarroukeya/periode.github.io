@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction de Période de Construction</title>
+    <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: rgba(114, 114, 126, 0.818); /* Background bleu */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .title-container {
+            background-color: rgba(114, 114, 126, 0.818); /* Carre blanc pour le titre */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            background-color: white; /* Carre blanc pour le contenu principal */
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+            color: rgba(12, 12, 78, 0.93) ;
+        }
+        label, input {
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: rgba(12, 12, 78, 0.93);
+        }
+        input {
+            border-width: 2px; /* Mettre le cadre en gras */
+            border-color: rgba(12, 12, 78, 0.93)
+            
+        }
+        button {
+            margin-bottom: 10px;
+            background-color:rgba(114, 114, 126, 0.818);
+            color:white;
+            font-weight: bold;
+            border-radius: 2%;
+            border-color:rgba(12, 12, 78, 0.93);
+        }
+        .logo{
+            max-width: 120px; /* Définir une largeur maximale pour l'image */
+            height: 120px; /* Ajuster automatiquement la hauteur */
+            border-radius: 1%;
+            border-color:  rgba(12, 12, 78, 0.93);
+        }
+        .h2{ 
+            color: rgba(12, 12, 78, 0.93);
+        }
+    </style>
+    
+</head>
+<body>
+    <div class="container">
+        <div class="title-container">
+            <h1>Poulina Groupe Holding</h1> <!-- Carre pour le titre -->
+            <img class="logo" src="téléchargement (1).png" alt="Logo Poulina Groupe Holding"> <!-- Image/logo -->
+        </div>
+        <div class="sub-container"> <!-- Conteneur pour le titre "Prédiction de Période de Construction" -->
+            <h2  class="h2">  Prédiction de la Période de Construction</h2> <!-- Carre avec titre -->
+            <label for="periode">Entrez la période de construction prévue :</label>
+            <input type="text" id="periode_construction_prevue" name="periode_construction_prevue"><br>
+            <label for="budget">Entrez le budget de construction prévu :</label>
+            <input type="number" id="budget_construction_prevu" name="budget_construction_prevu"><br>
+            <button onclick="predictConstructionPeriod()">Prédire la période de construction</button>
+            <p id="predictedPeriod"></p>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    async function predictConstructionPeriod() {
+        const periode_construction_prevue = document.getElementById('periode_construction_prevue').value;
+        const budget_construction_prevu = document.getElementById('budget_construction_prevu').value;
+        const response = await fetch('http://127.0.0.1:8000/predict_p/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ "periode_construction_prevue": periode_construction_prevue, "budget_construction_prevu": budget_construction_prevu })
+        });
+        const data = await response.json();
+        const predictedPeriodElement = document.getElementById('predictedPeriod');
+        predictedPeriodElement.innerHTML = ''; // Clear previous content
+        const predictionDiv = document.createElement('div');
+        predictionDiv.style.border = '2px solid  rgba(12, 12, 78, 0.93)'; // Cadre bleu
+        predictionDiv.style.padding = '10px';
+        predictionDiv.style.fontWeight = 'bold'; // Texte en gras
+        predictionDiv.style.color = 'rgba(12, 12, 78, 0.93)'; // Texte bleu
+        predictionDiv.innerText = `Période de construction prédite : ${data.predicted_construction_period}`;
+        predictedPeriodElement.appendChild(predictionDiv);
+    }
+</script>
+</body>
+</html>
